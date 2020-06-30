@@ -27,8 +27,10 @@ class PagesController extends Controller
     //The site's Task View page
     public function task()
     {
-        $title = 'Task View';
-        return view('pages.task')->with('title', $title);
+        $data = array(
+          'title' => 'Task View'
+        );
+        return view('pages.task')->with('title', $data);
     }
 
     //The site's Task Edit page

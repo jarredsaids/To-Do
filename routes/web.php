@@ -26,12 +26,12 @@ Route::get('/', 'PagesController@index');
 Route::get('/about', 'PagesController@about');
 
 // TASK MAIN PAGE
-Route::get('/about', 'PagesController@tasks');
+Route::get('/tasks', 'PagesController@tasks');
 
 // INDIVIDUAL TASK VIEW PAGE
-Route::get('/about', 'PagesController@task');
+Route::get('/task', 'PagesController@task');
 
 // TASK EDIT PAGE
-Route::get('/about', 'PagesController@edit');
+Route::get('/edit', 'PagesController@edit');
 
 
