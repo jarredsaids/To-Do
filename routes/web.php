@@ -34,4 +34,12 @@ Route::get('/task', 'PagesController@task');
 // TASK EDIT PAGE
 Route::get('/edit', 'PagesController@edit');
 
+//Generate the routes for TasksController
+Route::resource('tasks', 'TasksController');
+
+//Generate the routes for TasksController
+Route::resource('priorities', 'PrioritiesController');
+
+//Generate the routes for TasksController
+Route::resource('plists', 'PListsController');
 
