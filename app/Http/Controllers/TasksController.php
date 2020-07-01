@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Task;
 
 class TasksController extends Controller
 {
@@ -13,7 +14,23 @@ class TasksController extends Controller
      */
     public function index()
     {
-        //
+
+/*      //Sort by title [Ascending]
+ *      $tasks =  Task::orderBy('title','asc')->get();
+ */
+
+/*      //Sort by title [Descending]
+ *      $tasks =  Task::orderBy('title','desc')->get();
+ */
+
+/*        //Return specific task
+ *      $task = Task::where('title, 'Task __')0>get();
+ */
+
+        //$tasks = 2D array of all saved tasks
+        //$tasks =  Task::all();
+        $tasks =  Task::orderBy('title', 'desc')->paginate(8);
+        return view('tasks.index')->with('tasks', $tasks);
     }
 
     /**
@@ -45,7 +62,8 @@ class TasksController extends Controller
      */
     public function show($id)
     {
-        //
+        $task = Task::find($id);
+        return view('tasks.show')->with('task', $task);
     }
 
     /**
