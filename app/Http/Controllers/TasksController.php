@@ -40,18 +40,32 @@ class TasksController extends Controller
      */
     public function create()
     {
-        //
+        return view("tasks.create");
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+           'title' => 'required',
+           'body' => 'required',
+        ]);
+
+        // Create Task
+        $task = new Task;
+        $task->title = $request->input('title');
+        $task->body = $request->input('body');
+        //NEEDS PRIORITIES TO BE PROCESSED!
+        $task->completed = FALSE;
+        $task->save();
+
+        return redirect('/tasks')->with('success', 'Task Created');
     }
 
     /**

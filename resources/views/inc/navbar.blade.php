@@ -17,10 +17,8 @@
             </li>
 
         </ul>
-        <form class="form-inline my-2 my-md-0">
-            <label>
-                <input class="form-control" type="text" placeholder="Search">
-            </label>
-        </form>
+        <ul class = "nav navbar-nav nav-bar-right">
+            <li><a href = "/tasks/create">Create Task</a></li>
+        </ul>
     </div>
 </nav>

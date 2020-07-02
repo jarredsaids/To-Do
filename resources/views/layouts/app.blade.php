@@ -10,8 +10,12 @@
 <body>
     @include('inc.navbar')
     <div class ="container ">
+        @include('inc.messages')
         @yield('content')
     </div>
 
+    <!-- Scripts -->
+    <script src="https://cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
+    <script> setTimeout(function(){ CKEDITOR.replace( 'article-ckeditor' ); },400); </script>`
 </body>
 </html>

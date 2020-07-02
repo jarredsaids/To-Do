@@ -12,4 +12,8 @@ class Task extends Model
     public $primaryKey = 'id';
     // Timestamps
     public $timestamps = 'true';
+
+    /**
+     * @var mixed
+     */
 }
