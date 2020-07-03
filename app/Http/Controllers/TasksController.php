@@ -109,6 +109,7 @@ class TasksController extends Controller
         $task = Task::find($id);
         $task->title = $request->input('title');
         $task->body = $request->input('body');
+        $task->completeddate = $request->input('completeddate');
         //NEEDS PRIORITIES TO BE PROCESSED!
 
 

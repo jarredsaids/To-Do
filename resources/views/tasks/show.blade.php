@@ -7,7 +7,10 @@
         {!!$task->body!!}
     </div>
     <hr>
-    <small>Created: {{$task->created_at}}</small>
+    <small><b>Created:</b> {{$task->created_at->format('m/d/Y, h:i A')}}</small>
+    @if($task->completed == TRUE)
+        <small class="float-right"><b>Completed:</b> {{$task->completeddate->format('m/d/Y, h:i A')}}</small>
+    @endif
     <hr>
     <a href="/tasks/{{$task->id}}/edit" class="btn btn-outline-secondary">Edit</a>
 
