@@ -29,7 +29,7 @@ Route::get('/about', 'PagesController@about');
 Route::get('/tasks', 'PagesController@tasks');
 
 // INDIVIDUAL TASK VIEW PAGE
-Route::get('/task', 'PagesController@task');
+Route::get('/tasks', 'PagesController@task');
 
 // TASK EDIT PAGE
 Route::get('/edit', 'PagesController@edit');

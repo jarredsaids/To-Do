@@ -10,11 +10,16 @@
     <div class = "form-group">
         {{Form::label('title', 'Title')}}
         {{Form::text('title', $task->title,[ 'class' => 'form-control', 'placeholder'=> 'title' ])}}
-
     </div>
     <div class = "form-group">
         {{Form::label('body', 'Body')}}
         {{Form::textarea('body', $task->body,['id' =>'article-ckeditor', 'class' => 'form-control', 'placeholder'=> 'body text' ])}}
+    </div>
+    <div class = "form-group">
+
+        {{Form::label('completed', 'Task Completed')}}
+        {!! Form::checkbox('completed', TRUE, FALSE ,  ['placeholder'=>'completed']) !!}
+
     </div>
 
     <div class = "form-group">

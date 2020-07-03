@@ -106,12 +106,17 @@ class TasksController extends Controller
             'body' => 'required',
         ]);
 
-        // Create Task
         $task = Task::find($id);
         $task->title = $request->input('title');
         $task->body = $request->input('body');
         //NEEDS PRIORITIES TO BE PROCESSED!
-        $task->completed = FALSE;
+
+
+        $task->completed = $request->input('completed');
+        if ($task->completed == NULL){
+            $task->completed = FALSE;
+        }
+
         $task->save();
 
         return redirect('/tasks')->with('success', 'Task Updated');
@@ -130,4 +135,7 @@ class TasksController extends Controller
         $task->delete();
         return redirect('/tasks')->with('success', 'Task Deleted');
     }
+
+
+
 }
