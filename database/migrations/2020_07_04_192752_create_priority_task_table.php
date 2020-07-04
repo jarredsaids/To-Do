@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePListsTable extends Migration
+class CreatePriorityTaskTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreatePListsTable extends Migration
      */
     public function up()
     {
-        Schema::create('p_lists', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('priority_task', function (Blueprint $table) {
+            $table->id();
             $table->integer('task_id');
-            $table->string('title');
-            $table->string('priority');
+            $table->integer('priority_id');
+            $table->timestamps();
         });
     }
 
@@ -28,6 +28,6 @@ class CreatePListsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('p_lists');
+        Schema::dropIfExists('priority_task');
     }
 }

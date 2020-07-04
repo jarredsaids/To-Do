@@ -15,7 +15,7 @@ class CreatePrioritiesTable extends Migration
     {
         Schema::create('priorities', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('p_type');
+            $table->string('p_type'); // TODO: rename to name
             $table->string('hex_color');
         });
     }

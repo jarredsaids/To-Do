@@ -41,8 +41,9 @@ class TasksController extends Controller
      */
     public function create()
     {
-        $data['priorities'] = Priority::all();
-        return view('tasks.create', ['data'=>$data]);
+        $priorities = Priority::all();
+
+        return view('tasks.create', compact('priorities'));
 
     }
 
@@ -56,40 +57,29 @@ class TasksController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-           'title' => 'required',
-           'body' => 'required',
+            'title' => 'required',
         ]);
 
         // Create Task
         $task = new Task;
         $task->title = $request->input('title');
-        $task->body = $request->input('body');
-        $task->completed = FALSE;
+
+        if (request()->has('body')) {
+            $task->body = $request->input('body');
+        }
+
         $task->save();
 
-        //Process and store the priorities
-        $data['priorities'] = Priority::all();
-        $plist = new PListsController();
-        $plist->task_id = $task->id;
-        $plist->title = $task->title;
+        $task->priorities()->sync($request->input('priority'));
 
-        foreach ($data['priorities'] as $p) {
-            if ($request->input($p->p_type) == TRUE){
-                $plist->priority = $request->input($p->p_type);
-                $plist->update($plist->task_id, $plist->title, $plist->priority);
-            }else{
-                $plist->priority = $p->p_type;
-                $plist->destroy($plist->task_id, $plist->priority);
-            }
 
-        }
-         return redirect('/tasks')->with('success', 'Task Created');
+        return redirect('/tasks')->with('success', 'Task Created');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -170,7 +160,5 @@ class TasksController extends Controller
         $task->delete();
         return redirect('/tasks')->with('success', 'Task Deleted');
     }
-
-
 
 }

@@ -13,6 +13,12 @@ class Task extends Model
     // Timestamps
     public $timestamps = true;
 
+    public function priorities()
+    {
+        return $this->belongsToMany(Priority::class);
+    }
+
+
     /**
      * @var mixed
      */

@@ -16,9 +16,8 @@ class CreateTasksTable extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
-            $table->mediumText('body');
-            $table->timestamp('completeddate');
-            $table->boolean('completed');
+            $table->mediumText('body')->nullable();
+            $table->timestamp('completed_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -31,6 +30,7 @@ class CreateTasksTable extends Migration
      */
     public function down()
     {
+        // consider disabling to prevent loss of data in production
         Schema::dropIfExists('tasks');
     }
 }

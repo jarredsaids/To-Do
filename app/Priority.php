@@ -10,4 +10,9 @@ class Priority extends Model
     protected $table = 'priorities';
     // Primary Key
     public $primaryKey = 'id';
+
+    public function task()
+    {
+        return $this->belongsToMany(Task::class);
+    }
 }

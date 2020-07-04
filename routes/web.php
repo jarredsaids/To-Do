@@ -20,10 +20,10 @@ Route::get('/', function () {
 
 // INDEX PAGE
 
-Route::get('/', 'PagesController@index');
+Route::get('/', 'PagesController@index')->name('home');
 
 // ABOUT PAGE
-Route::get('/about', 'PagesController@about');
+Route::get('/about', 'PagesController@about')->name('about');
 
 // TASK MAIN PAGE
 Route::get('/tasks', 'PagesController@tasks');

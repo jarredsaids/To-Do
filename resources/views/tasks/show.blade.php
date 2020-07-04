@@ -9,19 +9,19 @@
     @endif
 
     <!--Show Priorities attributed to task-->
-    <table><tr>
-            @foreach(\App\PList::all() as $plist)
-                @if ($task->id == $plist->task_id)
-                    @foreach(\App\Priority::all() as $priorities)
-                        @if($priorities->p_type == $plist->priority)
-                            <td class = "float-left " style = "background-color: {{$priorities->hex_color}};">
-                                {{$plist->priority}}
-                            </td>
-                        @endif
-                    @endforeach
-                @endif
-            @endforeach
-        </tr></table>
+{{--    <table><tr>--}}
+{{--            @foreach(\App\PList::all() as $plist)--}}
+{{--                @if ($task->id == $plist->task_id)--}}
+{{--                    @foreach(\App\Priority::all() as $priorities)--}}
+{{--                        @if($priorities->p_type == $plist->priority)--}}
+{{--                            <td class = "float-left " style = "background-color: {{$priorities->hex_color}};">--}}
+{{--                                {{$plist->priority}}--}}
+{{--                            </td>--}}
+{{--                        @endif--}}
+{{--                    @endforeach--}}
+{{--                @endif--}}
+{{--            @endforeach--}}
+{{--        </tr></table>--}}
 
     <div>
         {!!$task->body!!}
@@ -33,7 +33,7 @@
         <td><small><b>Modified:</b>{{$task->updated_at->format('m/d/Y, h:i A')}}</small></td>
 
         @if($task->completed == TRUE)
-            <td><small><b>Completed:</b> {{date('m/d/Y, h:i A',strtotime($task->completeddate))}}</small></td>
+            <td><small><b>Completed:</b> {{date('m/d/Y, h:i A',strtotime($task->completed_at))}}</small></td>
          @else
            <td><small><b>Completed:</b></small></td>
          @endif

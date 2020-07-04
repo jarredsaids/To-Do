@@ -29,33 +29,22 @@
         <!--Display the Tasks-->
         @foreach($tasks as $task)
             <div class="card card-body bg-light">
-                @if ($task->completed == FALSE)
+
+
+
+
+                @if (!$task->completed_at)
                     <h3>
                         <!--Toggle Complete-->
                         {!!Form::open(['action'=>['TasksController@update', $task->id], 'method' => 'PATCH', 'class' => 'float-left'])!!}
                         {!! Form::hidden('title', $task->title, ['title' => 'title']) !!}
                         {!! Form::hidden('body', $task->body, ['body' => 'body']) !!}
-                        {!! Form::hidden('completeddate', date('Y-m-d H:i:s'),['completeddate' => 'completeddate'])!!}
+                        {!! Form::hidden('completed_at', date('Y-m-d H:i:s'),['completed_at' => 'completed_at'])!!}
                         {!! Form::hidden('completed', TRUE, ['completed' => 'completed']) !!}
                         {{Form::submit('Complete', ['class' => 'btn btn-info'])}}
                         {!!Form::close()!!}
                         <a class = "pl-3" href = "/tasks/{{$task->id}}">{{$task->title}}</a>
                     </h3>
-
-                    <!--Show Priorities attributed to task-->
-                    <table><tr>
-                        @foreach(\App\PList::all() as $plist)
-                            @if ($task->id == $plist->task_id)
-                                @foreach(\App\Priority::all() as $priorities)
-                                    @if($priorities->p_type == $plist->priority)
-                                        <td class = "float-left " style = "background-color: {{$priorities->hex_color}};">
-                                            {{$plist->priority}}
-                                        </td>
-                                    @endif
-                                @endforeach
-                            @endif
-                        @endforeach
-                    </tr></table>
                 @else
                     <h3 style="text-decoration: line-through;">
                         <!--Toggle Complete-->
@@ -75,21 +64,7 @@
                         {!!Form::close()!!}
                     </h3>
 
-                    <!--Show Priorities attributed to task-->
-                    <table><tr>
-                            @foreach(\App\PList::all() as $plist)
-                                @if ($task->id == $plist->task_id)
-                                    @foreach(\App\Priority::all() as $priorities)
-                                        @if($priorities->p_type == $plist->priority)
-                                            <td class = "float-left " style = "background-color: {{$priorities->hex_color}};">
-                                                {{$plist->priority}}
-                                            </td>
-                                        @endif
-                                    @endforeach
-                                @endif
-                            @endforeach
-                        </tr></table>
-                    <small><b>Completed:</b> {{date('m/d/Y, h:i A',strtotime($task->completeddate))}}</small>
+                    <small><b>Completed:</b> {{date('m/d/Y, h:i A',strtotime($task->completed_at))}}</small>
             @endif
 
 
