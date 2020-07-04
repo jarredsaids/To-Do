@@ -8,6 +8,7 @@ use App\Task;
 
 class TasksController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -15,22 +16,32 @@ class TasksController extends Controller
      */
     public function index()
     {
+        //       dd(request()->input());
 
-/*      //Sort by title [Ascending]
- *      $tasks =  Task::orderBy('title','asc')->get();
- */
+        switch (request()->get('sortBy')) {
+            case 'created':
+                $sortBy = 'created_at';
+                break;
+            case 'completed':
+                $sortBy = 'completed_at';
+                break;
+            case 'title':
+                $sortBy = 'title';
+                break;
+            case 'priority':
+                $sortBy = 'priority';
+                break;
+            default:
+                $sortBy = 'created_at';
+        }
 
-/*      //Sort by title [Descending]
- *      $tasks =  Task::orderBy('title','desc')->get();
- */
+        $sortOrder = (request()->get('sortOrder') == 'ascending')
+            ? 'asc'
+            : 'desc';
 
-/*        //Return specific task
- *      $task = Task::where('title, 'Task __')0>get();
- */
 
-        //$tasks = 2D array of all saved tasks
-        //$tasks =  Task::all();
-        $tasks =  Task::orderBy('title', 'desc')->paginate(8);
+        $tasks = Task::orderBy('created_at', $sortOrder)->paginate(8);
+
         return view('tasks.index')->with('tasks', $tasks);
     }
 
@@ -91,42 +102,40 @@ class TasksController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         $data['task'] = Task::find($id);
         $data['priorities'] = Priority::all();
-          return view('tasks.edit', ['data'=>$data]);
+        return view('tasks.edit', ['data' => $data]);
         //return view('tasks.edit')->with('task', $task);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $this->validate($request, [
             'title' => 'required',
-            'body' => 'required',
         ]);
+
         $task = Task::find($id);
         $task->title = $request->input('title');
         $task->body = $request->input('body');
-        $task->completeddate = $request->input('completeddate');
-        $task->completed = $request->input('completed');
-        if ($task->completed == NULL){
-            $task->completed = FALSE;
-        }
+        $task->completed_at = now();
+
+
         $task->save();
 
         //if request from Tasks Index View (toggle complete), skip this
-        if(($request->input('_method')) != "PATCH"){
+        if (($request->input('_method')) != "PATCH") {
             //Process and store the priorities
             $data['priorities'] = Priority::all();
             $plist = new PListsController();
@@ -135,10 +144,10 @@ class TasksController extends Controller
 
             foreach ($data['priorities'] as $p) {
                 $p_string = "priority-" . $p->p_type;
-                if ($request->input($p_string) == TRUE){
+                if ($request->input($p_string) == TRUE) {
                     $plist->priority = $request->input($p_string);
                     $plist->update($plist->task_id, $plist->title, $plist->priority);
-                }else{
+                } else {
                     $plist->priority = $p->p_type;
                     $plist->destroy($plist->task_id, $plist->priority);
                 }
@@ -151,7 +160,7 @@ class TasksController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

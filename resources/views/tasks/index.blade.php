@@ -4,22 +4,24 @@
     <?php
     date_default_timezone_set('America/New_York');
     ?>
-    <h1>Tasks</h1>
+
+    <h1>Tasks
 
     <!-- Sort By button -->
-    <div class="btn-group">
-        <button type="button" class="btn btn-secondary">Action</button>
-        <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="sr-only">Toggle Dropdown</span>
-        </button>
-        <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Separated link</a>
+        <div class="btn-group float-right">
+            <button type="button" class="btn btn-secondary">Sort by...</button>
+            <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="/index">Completion Status</a>
+                <a class="dropdown-item" href="#">Creation Time</a>
+                <a class="dropdown-item" href="#">Alphabetical</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Priority Type:</a>
+            </div>
         </div>
-    </div>
+    </h1>
 
 <!--
     loop through 2D array $tasks for display

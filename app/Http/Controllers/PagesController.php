@@ -32,10 +32,4 @@ class PagesController extends Controller
         );
         return view('pages.task')->with('title', $data);
     }
-
-    //The site's Task Edit page
-    public function edit(){
-        $title = 'Edit Task';
-        return view('pages.edit')->with('title', $title);
-    }
 }

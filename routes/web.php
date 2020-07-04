@@ -30,10 +30,7 @@ Route::get('/tasks', 'PagesController@tasks');
 
 // INDIVIDUAL TASK VIEW PAGE
 Route::get('/tasks', 'PagesController@task');
-
-// TASK EDIT PAGE
-Route::get('/edit', 'PagesController@edit');
-
+ddi:
 //Generate the routes for TasksController
 Route::resource('tasks', 'TasksController');
 
