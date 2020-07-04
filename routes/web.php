@@ -37,9 +37,9 @@ Route::get('/edit', 'PagesController@edit');
 //Generate the routes for TasksController
 Route::resource('tasks', 'TasksController');
 
-//Generate the routes for TasksController
+//Generate the routes for PrioritiesController
 Route::resource('priorities', 'PrioritiesController');
 
-//Generate the routes for TasksController
+//Generate the routes for PListsController
 Route::resource('plists', 'PListsController');
 

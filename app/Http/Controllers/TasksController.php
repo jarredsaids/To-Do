@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Priority;
 use Illuminate\Http\Request;
 use App\Task;
 
@@ -40,7 +41,9 @@ class TasksController extends Controller
      */
     public function create()
     {
-        return view("tasks.create");
+        $data['priorities'] = Priority::all();
+        return view('tasks.create', ['data'=>$data]);
+
     }
 
     /**
@@ -61,11 +64,28 @@ class TasksController extends Controller
         $task = new Task;
         $task->title = $request->input('title');
         $task->body = $request->input('body');
-        //NEEDS PRIORITIES TO BE PROCESSED!
         $task->completed = FALSE;
         $task->save();
 
-        return redirect('/tasks')->with('success', 'Task Created');
+        //Process and store the priorities
+        $data['priorities'] = Priority::all();
+        foreach ($data['priorities'] as $p) {
+            if ($request->input($p->p_type) == TRUE){
+                $plist = new PListsController();
+                $plist->task_id = $task->id;
+                $plist->title = $task->title;
+                $plist->priority = $request->input($p->p_type);
+                $plist->update($plist->task_id, $plist->title, $plist->priority);
+            }else{
+                $plist = new PListsController();
+                $plist->task_id = $request->input('id');
+                $plist->title = $request->input('title');
+                $plist->priority = $request->input($p->p_type);
+                $plist->destroy($plist->task_id, $plist->priority);
+            }
+
+        }
+         return redirect('/tasks')->with('success', 'Task Created');
     }
 
     /**
@@ -88,8 +108,10 @@ class TasksController extends Controller
      */
     public function edit($id)
     {
-        $task = Task::find($id);
-        return view('tasks.edit')->with('task', $task);
+        $data['task'] = Task::find($id);
+        $data['priorities'] = Priority::all();
+          return view('tasks.edit', ['data'=>$data]);
+        //return view('tasks.edit')->with('task', $task);
     }
 
     /**

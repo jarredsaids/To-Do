@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Priority;
 use Illuminate\Http\Request;
 
 class PrioritiesController extends Controller
@@ -13,7 +14,8 @@ class PrioritiesController extends Controller
      */
     public function index()
     {
-        //
+        $priorities =  Priority::all();
+        return $priorities;
     }
 
     /**

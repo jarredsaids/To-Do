@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\PList;
 use Illuminate\Http\Request;
 
 class PListsController extends Controller
@@ -66,9 +67,22 @@ class PListsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id, $title, $priority)
     {
-        //
+        $plistAll = PList::all();
+        $found = FALSE;
+        foreach($plistAll as $entry){
+            if ($entry->task_id == $id && $entry->priority == $priority){
+                $found = TRUE;
+            }
+        }
+        if ($found == FALSE) {
+            $plist = new PList();
+            $plist->task_id = $id;
+            $plist->title = $title;
+            $plist->priority = $priority;
+            $plist->save();
+        }
     }
 
     /**
@@ -77,8 +91,15 @@ class PListsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, $priority)
     {
-        //
+        $plistAll = PList::all();
+        $found = FALSE;
+        foreach($plistAll as $entry){
+            if ($entry->id == $id && $entry->priority = $priority){
+                $plist = PList::find($entry->id);
+                $plist->delete();
+            }
+        }
     }
 }

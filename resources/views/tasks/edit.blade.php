@@ -6,14 +6,23 @@
     <!--
         Form for creating a Task
     -->
-    {!! Form::open(['action' => ['TasksController@update', $task->id], 'method' => 'POST']) !!}
+    {!! Form::open(['action' => ['TasksController@update', $data['task']->id], 'method' => 'POST']) !!}
     <div class = "form-group">
         {{Form::label('title', 'Title')}}
-        {{Form::text('title', $task->title,[ 'class' => 'form-control', 'placeholder'=> 'title' ])}}
+        {{Form::text('title', $data['task']->title,[ 'class' => 'form-control', 'placeholder'=> 'title' ])}}
+    </div>
+    <div class = "form-group">
+        <b>Priorities:</b>
+        @foreach($data['priorities'] as $priority)
+            <span style = "background-color: {{$priority->hex_color}};">
+               {!! Form::checkbox('priority-' . $priority->p_type, $priority->p_type, FALSE ,  ['placeholder'=>'priority']) !!}
+                {{Form::label('title',$priority->p_type)}}
+                </span>
+        @endforeach
     </div>
     <div class = "form-group">
         {{Form::label('body', 'Body')}}
-        {{Form::textarea('body', $task->body,['id' =>'article-ckeditor', 'class' => 'form-control', 'placeholder'=> 'body text' ])}}
+        {{Form::textarea('body', $data['task']->body,['id' =>'article-ckeditor', 'class' => 'form-control', 'placeholder'=> 'body text' ])}}
     </div>
     <div class = "form-group">
 

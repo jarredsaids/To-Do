@@ -15,6 +15,7 @@ class CreatePListsTable extends Migration
     {
         Schema::create('p_lists', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('task_id');
             $table->string('title');
             $table->string('priority');
         });

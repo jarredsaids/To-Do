@@ -13,6 +13,16 @@
 
         </div>
     <div class = "form-group">
+        <b>Priorities:</b>
+            @foreach($data['priorities'] as $priority)
+                <span style = "background-color: {{$priority->hex_color}};">
+               {!! Form::checkbox($priority->p_type, $priority->p_type, FALSE , ['placeholder'=>'priority']) !!}
+            {{Form::label('title',$priority->p_type)}}
+                </span>
+        @endforeach
+    </div>
+
+    <div class = "form-group">
         {{Form::label('body', 'Body')}}
         {{Form::textarea('body', '',['id' =>'article-ckeditor', 'class' => 'form-control', 'placeholder'=> 'body text' ])}}
     </div>
