@@ -2,7 +2,11 @@
 
 @section('content')
     <a href="/tasks" class = "btn btn-outline-secondary">Go Back</a>
-    <h1>{{$task->title}}</h1>
+    @if($task->completed == FALSE)
+        <h1 >{{$task->title}}</h1>
+    @else
+        <h1 style="text-decoration: line-through;">{{$task->title}}</h1>
+    @endif
 
     <!--Show Priorities attributed to task-->
     <table><tr>
@@ -24,10 +28,16 @@
     </div>
 
     <hr>
-    <small><b>Created:</b> {{$task->created_at->format('m/d/Y, h:i A')}}</small>
-    @if($task->completed == TRUE)
-        <small class="float-right"><b>Completed:</b> {{$task->completeddate->format('m/d/Y, h:i A')}}</small>
-    @endif
+    <table style ="width: 100%;"<tr>
+        <td><small><b>Created:</b> {{$task->created_at->format('m/d/Y, h:i A')}}</small></td>
+        <td><small><b>Modified:</b>{{$task->updated_at->format('m/d/Y, h:i A')}}</small></td>
+
+        @if($task->completed == TRUE)
+            <td><small><b>Completed:</b> {{date('m/d/Y, h:i A',strtotime($task->completeddate))}}</small></td>
+         @else
+           <td><small><b>Completed:</b></small></td>
+         @endif
+        </tr></table>
     <hr>
     <a href="/tasks/{{$task->id}}/edit" class="btn btn-outline-secondary">Edit</a>
 
