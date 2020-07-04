@@ -10,6 +10,8 @@
     loop through 2D array $tasks for display
 -->
     @if (count($tasks) > 0)
+
+        <!--Display the Tasks-->
         @foreach($tasks as $task)
             <div class="card card-body bg-light">
                 @if ($task->completed == FALSE)
@@ -24,6 +26,21 @@
                         {!!Form::close()!!}
                         <a class = "pl-3" href = "/tasks/{{$task->id}}">{{$task->title}}</a>
                     </h3>
+
+                    <!--Show Priorities attributed to task-->
+                    <table><tr>
+                        @foreach(\App\PList::all() as $plist)
+                            @if ($task->id == $plist->task_id)
+                                @foreach(\App\Priority::all() as $priorities)
+                                    @if($priorities->p_type == $plist->priority)
+                                        <td class = "float-left " style = "background-color: {{$priorities->hex_color}};">
+                                            {{$plist->priority}}
+                                        </td>
+                                    @endif
+                                @endforeach
+                            @endif
+                        @endforeach
+                    </tr></table>
                 @else
                     <h3 style="text-decoration: line-through;">
                         <!--Toggle Complete-->
@@ -42,6 +59,21 @@
                         {{Form::submit('Delete', ['class' => 'btn btn-danger'])}}
                         {!!Form::close()!!}
                     </h3>
+
+                    <!--Show Priorities attributed to task-->
+                    <table><tr>
+                            @foreach(\App\PList::all() as $plist)
+                                @if ($task->id == $plist->task_id)
+                                    @foreach(\App\Priority::all() as $priorities)
+                                        @if($priorities->p_type == $plist->priority)
+                                            <td class = "float-left " style = "background-color: {{$priorities->hex_color}};">
+                                                {{$plist->priority}}
+                                            </td>
+                                        @endif
+                                    @endforeach
+                                @endif
+                            @endforeach
+                        </tr></table>
                     <small><b>Completed:</b> {{date('m/d/Y, h:i A',strtotime($task->completeddate))}}</small>
             @endif
 
