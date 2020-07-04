@@ -93,10 +93,12 @@ class PListsController extends Controller
      */
     public function destroy($id, $priority)
     {
+
         $plistAll = PList::all();
         $found = FALSE;
         foreach($plistAll as $entry){
-            if ($entry->id == $id && $entry->priority = $priority){
+            if ($entry->task_id == $id && $entry->priority == $priority){
+
                 $plist = PList::find($entry->id);
                 $plist->delete();
             }

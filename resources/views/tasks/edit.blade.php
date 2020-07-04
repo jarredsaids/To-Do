@@ -15,8 +15,22 @@
         <b>Priorities:</b>
         @foreach($data['priorities'] as $priority)
             <span style = "background-color: {{$priority->hex_color}};">
-               {!! Form::checkbox('priority-' . $priority->p_type, $priority->p_type, FALSE ,  ['placeholder'=>'priority']) !!}
-                {{Form::label('title',$priority->p_type)}}
+
+            <!--check to see if the box should be checked-->
+            {{$found = FALSE}}
+            @foreach(\App\PList::all() as $plist)
+                @if ($data['task']->id == $plist->task_id && $plist->priority == $priority->p_type)
+                    {{$found =  " "}} <!--'TRUE' kept placing a '1' on the page-->
+                @endif
+            @endforeach
+            @if($found == TRUE)
+                {!! Form::checkbox('priority-' . $priority->p_type, $priority->p_type, TRUE ,  ['placeholder'=>'priority']) !!}
+            @else
+                {!! Form::checkbox('priority-' . $priority->p_type, $priority->p_type, FALSE ,  ['placeholder'=>'priority']) !!}
+            @endif
+
+                    {{Form::label('title',$priority->p_type)}}
+
                 </span>
         @endforeach
     </div>
@@ -27,17 +41,11 @@
     <div class = "form-group">
 
         {{Form::label('completed', 'Task Completed')}}
-        {!! Form::checkbox('completed', TRUE, FALSE ,  ['placeholder'=>'completed']) !!}
+
+                {!! Form::checkbox('completed', TRUE, FALSE ,  ['placeholder'=>'completed']) !!}
 
     </div>
 
-    <div class = "form-group">
-        <!--Loop through the priority type table for the priorities
-
-
-
-        -->
-    </div>
     {{Form::hidden('_method', 'PUT')}}  <!--spoofing a PUT request over POST-->
     {{Form::submit('Submit', ['class' => 'btn btn-primary'])}}
     {!! Form::close() !!}

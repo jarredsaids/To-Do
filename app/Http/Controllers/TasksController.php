@@ -69,18 +69,16 @@ class TasksController extends Controller
 
         //Process and store the priorities
         $data['priorities'] = Priority::all();
+        $plist = new PListsController();
+        $plist->task_id = $task->id;
+        $plist->title = $task->title;
+
         foreach ($data['priorities'] as $p) {
             if ($request->input($p->p_type) == TRUE){
-                $plist = new PListsController();
-                $plist->task_id = $task->id;
-                $plist->title = $task->title;
                 $plist->priority = $request->input($p->p_type);
                 $plist->update($plist->task_id, $plist->title, $plist->priority);
             }else{
-                $plist = new PListsController();
-                $plist->task_id = $request->input('id');
-                $plist->title = $request->input('title');
-                $plist->priority = $request->input($p->p_type);
+                $plist->priority = $p->p_type;
                 $plist->destroy($plist->task_id, $plist->priority);
             }
 
@@ -127,21 +125,35 @@ class TasksController extends Controller
             'title' => 'required',
             'body' => 'required',
         ]);
-
         $task = Task::find($id);
         $task->title = $request->input('title');
         $task->body = $request->input('body');
         $task->completeddate = $request->input('completeddate');
-        //NEEDS PRIORITIES TO BE PROCESSED!
-
-
         $task->completed = $request->input('completed');
         if ($task->completed == NULL){
             $task->completed = FALSE;
         }
-
         $task->save();
 
+        //if request from Tasks Index View (toggle complete), skip this
+        if(($request->input('_method')) != "PATCH"){
+            //Process and store the priorities
+            $data['priorities'] = Priority::all();
+            $plist = new PListsController();
+            $plist->task_id = $task->id;
+            $plist->title = $task->title;
+
+            foreach ($data['priorities'] as $p) {
+                $p_string = "priority-" . $p->p_type;
+                if ($request->input($p_string) == TRUE){
+                    $plist->priority = $request->input($p_string);
+                    $plist->update($plist->task_id, $plist->title, $plist->priority);
+                }else{
+                    $plist->priority = $p->p_type;
+                    $plist->destroy($plist->task_id, $plist->priority);
+                }
+            }
+        }
         return redirect('/tasks')->with('success', 'Task Updated');
 
     }

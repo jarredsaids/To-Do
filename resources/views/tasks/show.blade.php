@@ -3,9 +3,26 @@
 @section('content')
     <a href="/tasks" class = "btn btn-outline-secondary">Go Back</a>
     <h1>{{$task->title}}</h1>
+
+    <!--Show Priorities attributed to task-->
+    <table><tr>
+            @foreach(\App\PList::all() as $plist)
+                @if ($task->id == $plist->task_id)
+                    @foreach(\App\Priority::all() as $priorities)
+                        @if($priorities->p_type == $plist->priority)
+                            <td class = "float-left " style = "background-color: {{$priorities->hex_color}};">
+                                {{$plist->priority}}
+                            </td>
+                        @endif
+                    @endforeach
+                @endif
+            @endforeach
+        </tr></table>
+
     <div>
         {!!$task->body!!}
     </div>
+
     <hr>
     <small><b>Created:</b> {{$task->created_at->format('m/d/Y, h:i A')}}</small>
     @if($task->completed == TRUE)
