@@ -170,4 +170,11 @@ class TasksController extends Controller
         return redirect('/tasks')->with('success', 'Task Deleted');
     }
 
+    public function deleted()
+    {
+        $tasks = Task::deletedTasks()->paginate();
+
+        return view('tasks.index', compact('tasks'));
+    }
+
 }

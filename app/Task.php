@@ -18,8 +18,8 @@ class Task extends Model
         return $this->belongsToMany(Priority::class);
     }
 
-
-    /**
-     * @var mixed
-     */
+    public function scopeDeletedTasks($query)
+    {
+        return $query->where('deleted_at', '!=', null);
+    }
 }
