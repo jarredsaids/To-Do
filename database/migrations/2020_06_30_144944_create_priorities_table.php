@@ -10,7 +10,7 @@ class CreatePrioritiesTable extends Migration
      * Run the migrations.
      *
      * @return void
-     */t
+     */
     public function up()
     {
         Schema::create('priorities', function (Blueprint $table) {
