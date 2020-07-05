@@ -26,54 +26,67 @@
     <!--
         loop through 2D array $tasks for display
     -->
-    @if (count($tasks) > 0)
+    @forelse ($tasks as $task)
 
         <!--Display the Tasks-->
-        @foreach($tasks as $task)
-            <div class="card card-body bg-light">
+        <div class="panel panel-default">
+
+            <div class="panel-body">
+                <table>
+                    <tr>
+                        @if (!$task->completed_at)
+                            <td class="p-2 bd-highlight">
+                                <!--Toggle Complete-->
+                                {!!Form::open(['action'=>['TasksController@update', $task->id], 'method' => 'PATCH', 'class' => 'float-left'])!!}
+                                {!! Form::hidden('title', $task->title, ['title' => 'title']) !!}
+                                {!! Form::hidden('body', $task->body, ['body' => 'body']) !!}
+                                {!! Form::hidden('completed_at', date('Y-m-d H:i:s'),['completed_at' => 'completed_at'])!!}
+                                {!! Form::hidden('completed', TRUE, ['completed' => 'completed']) !!}
+                                {{Form::submit('Complete', ['class' => 'btn btn-info'])}}
+                                {!!Form::close()!!}
+                            </td>
+                            <td class="p-2 bd-highlight">
+                                <h3>
+                                    <a class="pl-3" href="/tasks/{{$task->id}}">{{$task->title}}</a>
+                                    <em>{{ $task->user->name }}</em>
+                                </h3>
+                            </td>
 
 
-                @if (!$task->completed_at)
-                    <h3>
-                        <!--Toggle Complete-->
-                        {!!Form::open(['action'=>['TasksController@update', $task->id], 'method' => 'PATCH', 'class' => 'float-left'])!!}
-                        {!! Form::hidden('title', $task->title, ['title' => 'title']) !!}
-                        {!! Form::hidden('body', $task->body, ['body' => 'body']) !!}
-                        {!! Form::hidden('completed_at', date('Y-m-d H:i:s'),['completed_at' => 'completed_at'])!!}
-                        {!! Form::hidden('completed', TRUE, ['completed' => 'completed']) !!}
-                        {{Form::submit('Complete', ['class' => 'btn btn-info'])}}
-                        {!!Form::close()!!}
-                        <a class="pl-3" href="/tasks/{{$task->id}}">{{$task->title}}</a>
-                        <em>{{ $task->user->name }}</em>
-                    </h3>
-                @else
-                    <h3 style="text-decoration: line-through;">
-                        <!--Toggle Complete-->
-                        {!!Form::open(['action'=>['TasksController@update', $task->id], 'method' => 'PATCH', 'class' => 'float-left'])!!}
-                        {!! Form::hidden('title', $task->title, ['title' => 'title']) !!}
-                        {!! Form::hidden('body', $task->body, ['body' => 'body']) !!}
-                        {!! Form::hidden('completed', FALSE, ['completed' => 'completed']) !!}
-                        {{Form::submit('Incomplete', ['class' => 'btn btn-info'])}}
-                        {!!Form::close()!!}
-
-                        <a class="pl-3" href="/tasks/{{$task->id}}">{{$task->title}}</a>
-
-                        <!--Delete Button-->
-                        {!!Form::open(['action'=>['TasksController@destroy', $task->id], 'method' => 'POST', 'class' => 'float-right'])!!}
-                        {{Form::hidden('_method','DELETE')}}
-                        {{Form::submit('Delete', ['class' => 'btn btn-danger'])}}
-                        {!!Form::close()!!}
-                    </h3>
-
-                    <small><b>Completed:</b> {{date('m/d/Y, h:i A',strtotime($task->completed_at))}}</small>
-                @endif
 
 
+                        @else
+                            <td class="p-2 bd-highlight">
+                                <!--Toggle Complete-->
+                                {!!Form::open(['action'=>['TasksController@update', $task->id], 'method' => 'PATCH', 'class' => 'float-left'])!!}
+                                {!! Form::hidden('title', $task->title, ['title' => 'title']) !!}
+                                {!! Form::hidden('body', $task->body, ['body' => 'body']) !!}
+                                {!! Form::hidden('completed', FALSE, ['completed' => 'completed']) !!}
+                                {{Form::submit('Incomplete', ['class' => 'btn btn-info'])}}
+                                {!!Form::close()!!}
+                            </td>
+                            <td class="p-2 bd-highlight">
+                                <h3 style="text-decoration: line-through;">
+                                    <a class="pl-3" href="/tasks/{{$task->id}}">{{$task->title}}</a>
+                                </h3>
+                            </td>
+                            <td class="p-2 bd-highlight">
+                                <!--Delete Button-->
+                                {!!Form::open(['action'=>['TasksController@destroy', $task->id], 'method' => 'POST', 'class' => 'float-right'])!!}
+                                {{Form::hidden('_method','DELETE')}}
+                                {{Form::submit('Delete', ['class' => 'btn btn-danger'])}}
+                                {!!Form::close()!!}
+                            </td>
+
+                            <small><b>Completed:</b> {{date('m/d/Y, h:i A',strtotime($task->completed_at))}}</small>
+                        @endif
+                    </tr>
+                </table>
             </div>
-        @endforeach
-
-{{--        {{$tasks->links()}}--}}
-    @else
+        </div>
+    @empty
         <p>No Tasks found</p>
-    @endif
+    @endempty
+
+    {{ $tasks->links() }}
 @endsection

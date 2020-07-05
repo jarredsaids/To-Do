@@ -1,0 +1,23 @@
+.priority {
+    padding: 5px;
+}
+
+.priority-urgent {
+    background-color: #ff0000;
+    color: #fff;
+}
+
+.priority-important {
+    background-color: #ffff00;
+    color: #000;
+}
+
+.priority-ignore {
+    background-color: #808080;
+    color: #000;
+}
+
+.priority-optional {
+    background-color: #0080ff;
+    color: #000;
+}
