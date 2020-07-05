@@ -6,6 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
+
+    /**
+     * eager load the user model
+     */
+    public $with = [
+        'user'
+    ];
+
     // Table Name
     protected $table = 'tasks';
     // Primary Key
@@ -16,6 +24,14 @@ class Task extends Model
     public function priorities()
     {
         return $this->belongsToMany(Priority::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user(){
+
+        return $this->belongsTo(User::class);
     }
 
     public function scopeDeletedTasks($query)

@@ -40,7 +40,7 @@ class TasksController extends Controller
             : 'desc';
 
 
-        $tasks = Task::orderBy('created_at', $sortOrder)->paginate(8);
+        $tasks = Task::orderBy('created_at', $sortOrder)->paginate();
 
         return view('tasks.index')->with('tasks', $tasks);
     }
@@ -74,6 +74,7 @@ class TasksController extends Controller
         // Create Task
         $task = new Task;
         $task->title = $request->input('title');
+        $task->user_id = auth()->id();
 
         if (request()->has('body')) {
             $task->body = $request->input('body');
@@ -126,10 +127,13 @@ class TasksController extends Controller
             'title' => 'required',
         ]);
 
+        // what happens if an unauthenticated user tries to update a task
+
         $task = Task::find($id);
         $task->title = $request->input('title');
         $task->body = $request->input('body');
         $task->completed_at = now();
+        $task->user_id = auth()->id();
 
 
         $task->save();
