@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class = "jumbotron text-center">
-        <h1>{{$title}}</h1>
-        <p>This the #1 rated task making and prioritizing program.</p>
-        <p><a class="btn btn-primary btn-lg" href="/tasks" roles="button">View Tasks</a></p>
+    <div class="jumbotron text-center">
+        <h1>Welcome to WolfTask!</h1>
+        <p>This is the #1 rated task management and prioritization application!</p>
+        <p><a class="btn btn-primary btn-lg" href="{{ route('tasks.index') }}" roles="button">Manage Tasks</a></p>
     </div>
 @endsection

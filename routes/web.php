@@ -12,31 +12,10 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-// DEFAULT WELCOME PAGE
-/*
-Route::get('/', function () {
-    return view('welcome');
-}); */
 
-// INDEX PAGE
+Route::view('/', 'pages.index')->name('home');
+Route::view('/about', 'pages.about')->name('about');
 
-Route::get('/', 'PagesController@index')->name('home');
-
-// ABOUT PAGE
-Route::get('/about', 'PagesController@about')->name('about');
-
-// TASK MAIN PAGE
-Route::get('/tasks', 'PagesController@tasks');
-
-// INDIVIDUAL TASK VIEW PAGE
-Route::get('/tasks', 'PagesController@task');
-ddi:
-//Generate the routes for TasksController
+Route::get('tasks/deleted', 'TasksController@deleted');
 Route::resource('tasks', 'TasksController');
-
-//Generate the routes for PrioritiesController
 Route::resource('priorities', 'PrioritiesController');
-
-//Generate the routes for PListsController
-Route::resource('plists', 'PListsController');
-

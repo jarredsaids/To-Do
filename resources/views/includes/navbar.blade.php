@@ -7,16 +7,16 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Project name</a>
+            <a class="navbar-brand" href="#">{{ config('app.name') }}</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="{{ route('home') }}">Home</a></li>
-                <li><a href="{{ route('about') }}">About</a></li>
-                <li><a href="{{ route('tasks.index') }}">Tasks</a></li>
+                <li class="{{ is_active(['/']) }}"><a href="{{ route('home') }}">Home</a></li>
+                <li class="{{ is_active(['about']) }}"><a href="{{ route('about') }}">About</a></li>
+                <li class="{{ is_active(['tasks', 'tasks/completed']) }}"><a href="{{ route('tasks.index') }}">Tasks</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="{{ route('tasks.create') }}">New Tasks</a></li>
+                <li><a href="{{ route('tasks.create') }}">New Task</a></li>
             </ul>
         </div>
     </div>

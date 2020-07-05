@@ -8,18 +8,16 @@
             </div>
         @endforeach
     @endif
-<!--
-    Check for session success/errors
--->
+
     @if(session('success'))
-        <div class="alert alert-success">
-            {{session('success')}}
+        <div class="alert alert-success fade-out">
+            {{ session('success' )}}
         </div>
     @endif
 
     @if(session('error'))
         <div class="alert alert-danger">
-            {{session('error')}}
+            {{ session('error' )}}
         </div>
     @endif
 
