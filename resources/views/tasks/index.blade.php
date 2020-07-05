@@ -8,7 +8,15 @@
         <h1>Not logged in</h1>
     @endauth
 
-    <h1>Pending Tasks</h1>
+    <form action="{{ route('tasks.store') }}" method="post" class="form-group">
+        {{ csrf_field() }}
+        <label for="title">Let's create a task!</label>
+        <input type="text" class="form-control" name="title" id="title">
+        
+    </form>
+
+
+    <h2>Pending Tasks</h2>
     <hr>
 
     <div class="dropdown">
