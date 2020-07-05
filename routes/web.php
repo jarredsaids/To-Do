@@ -19,6 +19,10 @@ Route::get('login/google/callback', 'Auth\LoginController@handleProviderCallback
 Route::view('/', 'pages.index')->name('home');
 Route::view('/about', 'pages.about')->name('about');
 
-Route::get('tasks/deleted', 'TasksController@deleted');
-Route::resource('tasks', 'TasksController');
-Route::resource('priorities', 'PrioritiesController');
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('tasks/deleted', 'TasksController@deleted');
+    Route::resource('tasks', 'TasksController');
+    Route::resource('priorities', 'PrioritiesController');
+});
+
+
