@@ -2,23 +2,20 @@
 
 @section('content')
 
-    <h1>Tasks
+    <h1>Pending Tasks</h1>
+    <hr>
 
-    <!-- Sort By button -->
-        <div class="btn-group float-right">
-            <button type="button" class="btn btn-secondary">Sort by...</button>
-            <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="sr-only">Toggle Dropdown</span>
-            </button>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" href="/index">Completion Status</a>
-                <a class="dropdown-item" href="#">Creation Time</a>
-                <a class="dropdown-item" href="#">Alphabetical</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Priority Type:</a>
-            </div>
-        </div>
-    </h1>
+    <div class="dropdown">
+        <button class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+            Sort by...
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Creation Date</a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Completion Date</a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Deletion Date</a></li>
+        </ul>
+    </div>
 
 <!--
     loop through 2D array $tasks for display
