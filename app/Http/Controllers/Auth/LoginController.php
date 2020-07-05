@@ -10,6 +10,13 @@ use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends Controller
 {
+    public function logout()
+    {
+        auth()->logout();
+
+        return redirect(route('home'));
+    }
+
     /**
      * Redirect the user to the GitHub authentication page.
      *
