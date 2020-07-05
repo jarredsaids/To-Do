@@ -1,9 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    <?php
-    date_default_timezone_set('America/New_York');
-    ?>
 
     <h1>Tasks
 
