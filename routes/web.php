@@ -13,9 +13,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('login/google', 'Auth\LoginController@redirectToProvider')->name('google.login');
+Route::get('login/google/callback', 'Auth\LoginController@handleProviderCallback');
+Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+
 Route::view('/', 'pages.index')->name('home');
 Route::view('/about', 'pages.about')->name('about');
 
-Route::get('tasks/deleted', 'TasksController@deleted');
-Route::resource('tasks', 'TasksController');
-Route::resource('priorities', 'PrioritiesController');
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('tasks/filter-by/{priority?}', 'TasksController@index')->name('tasks.filter-by');
+    Route::resource('tasks', 'TasksController');
+    Route::resource('priorities', 'PrioritiesController');
+});
+
+
