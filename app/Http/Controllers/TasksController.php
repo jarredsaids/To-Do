@@ -12,7 +12,7 @@ class TasksController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($priority = null)
     {
         switch (request()->get('sortBy')) {
             case 'created':
@@ -24,9 +24,6 @@ class TasksController extends Controller
             case 'title':
                 $sortBy = 'title';
                 break;
-            case 'priority':
-                $sortBy = 'priority';
-                break;
             default:
                 $sortBy = 'created_at';
         }
@@ -34,11 +31,17 @@ class TasksController extends Controller
         $sortOrder = request()->input('sortOrder') == 'asc'
             ? 'desc' : 'asc';
 
-        $tasks = Task::orderBy($sortBy, $sortOrder)->paginate();
+        if ($priority) {
+            $tasks = Priority::where('name', $priority)->firstOrFail()
+                ->tasks()->orderBy($sortBy, $sortOrder)->paginate();
+        } else {
+            $tasks = Task::orderBy($sortBy, $sortOrder)->paginate();
+        }
 
         return view('tasks.index', [
             'tasks' => $tasks->appends(request()->except('page')),
-            'sortOrder' => $sortOrder
+            'sortOrder' => $sortOrder,
+            'sortBy' => $sortBy
         ]);
 
     }
@@ -94,7 +97,8 @@ class TasksController extends Controller
      */
     public function show($id)
     {
-        $task = Task::find($id);
+        $task = Task::findOrFail($id);
+
         return view('tasks.show')->with('task', $task);
     }
 
@@ -118,16 +122,19 @@ class TasksController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param int $id
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $task = Task::findOrFail($id);
 
         if (request()->has('completed')) {
+            // we want to mark as incomplete
+            if ($task->isCompleted) {
+                $task->markAsIncomplete();
+                return redirect(route('tasks.index'))->with('success', 'Task marked incomplete');
+            }
             $task->markAsCompleted();
-
-            return redirect(route('tasks.index'));
+            return redirect(route('tasks.index'))->with('success', 'Task marked complete');
         }
 
         $this->validate($request, [
@@ -139,7 +146,7 @@ class TasksController extends Controller
         ]));
 
         if ($request->has('priorities')) {
-            $task->priorities()->sync(array_keys($request->input('priorities')));
+            $task->priorities()->sync(array_values($request->input('priorities')));
         }
 
         return redirect(route('tasks.show', $task))->with('success', 'Task Updated');
@@ -155,14 +162,7 @@ class TasksController extends Controller
     {
         $task = Task::find($id);
         $task->delete();
+
         return redirect('/tasks')->with('success', 'Task Deleted');
     }
-
-    public function deleted()
-    {
-        $tasks = Task::deletedTasks()->paginate();
-
-        return view('tasks.index', compact('tasks'));
-    }
-
 }

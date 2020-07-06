@@ -2,51 +2,54 @@
 
 @section('content')
     <a href="{{route('tasks.index')}}" class="btn btn-outline-secondary">Go Back</a>
-    @if($task->completed == FALSE)
-        <h1>{{$task->title}}
-            @else
-                <h1 style="text-decoration: line-through;">{{$task->title}}
-                    @endif
+    <h3>
+        @if($task->isCompleted)
+        {{$task->title}}
+        @else
+        <strike>{{$task->title}}</strike>
+        @endif
+        @foreach ($task->priorities as $priority)
+            <div class="pull-right margin-top-lg badge priority-{{ $priority->name }} margin-y-sm"
+                 style="border-radius: 0;">
+                <label>
+                    {{ strtoupper($priority->name) }}
+                </label>
 
-                    @foreach ($task->priorities as $priority)
-                        <div class="pull-right margin-top-lg badge priority-{{ $priority->name }} margin-y-sm"
-                             style="border-radius: 0;">
-                            <label>
-                                {{ strtoupper($priority->name) }}
-                            </label>
+            </div>
+        @endforeach
+    </h3>
+    <hr>
 
-                        </div>
-                    @endforeach
-                </h1>
+    <div class="alert alert-info">
+        <form action="{{ route('tasks.destroy', $task) }}" method="post">
+            <div class="pull-left">This task has been <strong>completed</strong>. Would you like to delete it?</div>
+            <button type="submit" class="btn btn-outline-primary pull-right"><i class="fa fa-trash"></i> Delete</button>
+            <div class="clearfix"></div>
 
-                @if ($task->body)
+            {{ method_field('DELETE') }}
+            {{ csrf_field() }}
+        </form>
+    </div>
 
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            {{ $task->body }}
-                        </div>
-                    </div>
-                @endif
+    @if ($task->body)
 
-                <hr>
-                <p>
-                    <strong>Created:</strong> {{$task->created_at->format('m/d/Y, h:i A')}}
-                    <strong>Modified:</strong>{{$task->updated_at->format('m/d/Y, h:i A')}}
-                    @if($task->completed_at)
-                        <strong>Completed:</strong> {{date('m/d/Y, h:i A',strtotime($task->completed_at))}}
-                    @endif
-                </p>
-                <hr>
-                <div class="pull-left margin-top-lg margin-y-sm"><a class="btn btn-default"
-                                                                    href="{{ route('tasks.edit', $task->id) }}">Edit</a>
-                </div>
-                <div class="pull-left margin-top-lg margin-y-sm">
-                    <form action="">
-                        <button type="submit" class="btn btn-danger" href="{{ route('tasks.destroy', $task->id) }}">
-                            Delete
-                        </button>
-                    </form>
-                </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                {{ $task->body }}
+            </div>
+        </div>
+    @endif
 
-        {{ method_field('DELETE') }}
+    <hr>
+    <p>
+        <strong>Created:</strong> {{$task->created_at->format('m/d/Y, h:i A')}}
+        <strong>Modified:</strong>{{$task->updated_at->format('m/d/Y, h:i A')}}
+        @if($task->completed_at)
+            <strong>Completed:</strong> {{date('m/d/Y, h:i A',strtotime($task->completed_at))}}
+        @endif
+    </p>
+    <hr>
+    <div class="pull-left margin-top-lg margin-y-sm">
+        <a class="btn btn-default" href="{{ route('tasks.edit', $task->id) }}">Edit</a>
+    </div>
 @endsection

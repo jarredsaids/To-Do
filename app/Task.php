@@ -51,4 +51,12 @@ class Task extends Model
             'completed_at' => now()
         ]);
     }
+
+    public function markAsIncomplete()
+    {
+        $this->update([
+            'completed_at' => null
+        ]);
+    }
+
 }

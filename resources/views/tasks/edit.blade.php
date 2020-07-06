@@ -6,7 +6,6 @@
 
         <h1>Edit Task
             @foreach ($priorities as $priority)
-                {{ $task->priorities->has($priority->id) }}
                 <div class="pull-right margin-top-lg badge priority-{{ $priority->name }} margin-y-sm"
                      style="border-radius: 0;">
                     <label>

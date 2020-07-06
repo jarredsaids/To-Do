@@ -21,7 +21,7 @@ Route::view('/', 'pages.index')->name('home');
 Route::view('/about', 'pages.about')->name('about');
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('tasks/deleted', 'TasksController@deleted');
+    Route::get('tasks/filter-by/{priority?}', 'TasksController@index')->name('tasks.filter-by');
     Route::resource('tasks', 'TasksController');
     Route::resource('priorities', 'PrioritiesController');
 });
