@@ -83,11 +83,13 @@
                                     {{ method_field('patch') }}
                                     <input type="hidden" name="completed" id="completed">
                                     @if ($task->isCompleted)
-                                        <button type="submit" class="btn btn-outline-secondary d-inline"><i
-                                                class="fa fa-times"></i>
+                                        <button title="Mark incomplete"
+                                                type="submit" class="btn btn-outline-secondary d-inline"><i
+                                                class="fa fa-check"></i>
                                         </button>
                                     @else
-                                        <button type="submit" class="btn btn-primary d-inline"><i
+                                        <button title="Mark complete"
+                                                type="submit" class="btn btn-primary d-inline"><i
                                                 class="fa fa-check"></i>
                                         </button>
                                     @endif

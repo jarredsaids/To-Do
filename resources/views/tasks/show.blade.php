@@ -3,10 +3,10 @@
 @section('content')
     <a href="{{route('tasks.index')}}" class="btn btn-outline-secondary">Go Back</a>
     <h3>
-        @if($task->isCompleted)
-        {{$task->title}}
+        @if(!$task->isCompleted)
+            {{$task->title}}
         @else
-        <strike>{{$task->title}}</strike>
+            <strike>{{$task->title}}</strike>
         @endif
         @foreach ($task->priorities as $priority)
             <div class="pull-right margin-top-lg badge priority-{{ $priority->name }} margin-y-sm"
@@ -20,16 +20,19 @@
     </h3>
     <hr>
 
-    <div class="alert alert-info">
-        <form action="{{ route('tasks.destroy', $task) }}" method="post">
-            <div class="pull-left">This task has been <strong>completed</strong>. Would you like to delete it?</div>
-            <button type="submit" class="btn btn-outline-primary pull-right"><i class="fa fa-trash"></i> Delete</button>
-            <div class="clearfix"></div>
+    @if ($task->isCompleted)
+        <div class="alert alert-info">
+            <form action="{{ route('tasks.destroy', $task) }}" method="post">
+                <div class="pull-left">This task has been <strong>completed</strong>. Would you like to delete it?</div>
+                <button type="submit" class="btn btn-outline-primary pull-right"><i class="fa fa-trash"></i> Delete
+                </button>
+                <div class="clearfix"></div>
 
-            {{ method_field('DELETE') }}
-            {{ csrf_field() }}
-        </form>
-    </div>
+                {{ method_field('DELETE') }}
+                {{ csrf_field() }}
+            </form>
+        </div>
+    @endif
 
     @if ($task->body)
 
