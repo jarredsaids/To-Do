@@ -1,42 +1,35 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Create Task</h1>
+    <form action="{{route('tasks.store')}}" method="post">
+    <h1>Create Task
+    @foreach ($priorities as $priority)
+        <div class="pull-right margin-top-lg badge priority-{{ $priority->name }} margin-y-sm"
+             style="border-radius: 0;">
+            <label>
+                <input type="checkbox"
+                       {{ (!$priority->id) ? "checked=checked" : null }}
+                       name="priorities[]" value="{{ $priority->id }}">
+                {{ strtoupper($priority->name) }}
+            </label>
+
+        </div>
+    @endforeach
+    </h1>
 
     <!--
         Form for creating a Task
     -->
-    {!! Form::open(['action' => 'TasksController@store', 'method' => 'POST']) !!}
-    <div class="form-group">
-        {{Form::label('title', 'Title')}}
-        {{Form::text('title', '',[ 'class' => 'form-control', 'placeholder'=> 'title' ])}}
-
-    </div>
-    <div class="form-group">
-        <b>Priorities:</b>
-        @foreach($priorities as $priority)
-            <span style="background-color: {{$priority->hex_color}};">
-                {!! Form::checkbox('priority[]', $priority->id, false, ['placeholder'=>'priority']) !!}
-                {{Form::label($priority->p_type, null)}}
-            </span>
-        @endforeach
+    <div class="row margin-x-lg">
+        <input class="form-control" placeholder = "Title of Task" type="text" name="title" id="title" value="">
     </div>
 
-    <div class="form-group">
-        {{Form::label('body', 'Body')}}
-        {{Form::textarea('body', '',['id' =>'article-ckeditor', 'class' => 'form-control', 'placeholder'=> 'body text' ])}}
-    </div>
-
-    <div class="form-group">
-        <!--Loop through the priority type table for the priorities
+    <textarea name="body" id="body" cols="30" rows="10"
+              class="form-control" placeholder="Body of task (optional)"></textarea>
 
 
-
-        -->
-    </div>
-
-    {{Form::submit('Submit', ['class' => 'btn btn-primary'])}}
-
-    {!! Form::close() !!}
+    <button type="submit" class="btn btn-default margin-top-md pull-right">Create</button>
+    {{ csrf_field() }}
+    </form>
 
 @endsection
