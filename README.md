@@ -2,8 +2,6 @@
 
 WolfTask is a to-do list application that was written by David Turner and built for the ECE department Web Programmer position.
 
-![](https://i.imgur.com/539WRwL.png) ![](https://i.imgur.com/HtkWkir.png)
-
 ## Installation
 
 WolfTask is a Laravel 7 application. To install the application in a production environment, follow the steps below:
@@ -40,6 +38,13 @@ Once this is done, you can store client id and secret in your `.env`
 ## Usage
 
 Users can create tasks, associate tasks with multiple priorities, edit an existing task, toggle completion of a task, and delete tasks. Authentication is supported by Google, so users must have a Google account to log in.
+
+## Screenshots
+
+![](https://i.imgur.com/539WRwL.png) 
+
+
+![](https://i.imgur.com/HtkWkir.png)
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
