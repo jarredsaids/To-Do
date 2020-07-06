@@ -25,7 +25,7 @@ class TasksController extends Controller
                 $sortBy = 'title';
                 break;
             default:
-                $sortBy = 'created_at';
+                $sortBy = 'completed_at';
         }
 
         $sortOrder = request()->input('sortOrder') == 'asc'
