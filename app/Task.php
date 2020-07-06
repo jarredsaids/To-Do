@@ -19,7 +19,7 @@ class Task extends Model
     ];
 
     public $with = [
-        'user'
+        'user', 'priorities'
     ];
 
     public function priorities()
