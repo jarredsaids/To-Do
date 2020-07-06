@@ -13,8 +13,8 @@ class PrioritySeeder extends Seeder
     public function run()
     {
         Task::all()->each(function ($task) {
-            $priorities = array_rand(range(1, 4), rand(1, 2));
-            $task->priorities()->sync($priorities);
+            $collection = collect(range(1,4));
+            $task->priorities()->sync($collection->random(2));
         });
     }
 }
