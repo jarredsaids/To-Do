@@ -33,9 +33,12 @@ class TasksController extends Controller
 
         if ($priority) {
             $tasks = Priority::where('name', $priority)->firstOrFail()
-                ->tasks()->orderBy($sortBy, $sortOrder)->paginate();
+                ->tasks()->where('user_id', auth()->id())
+                ->orderBy($sortBy, $sortOrder)
+                ->paginate();
         } else {
-            $tasks = Task::orderBy($sortBy, $sortOrder)->paginate();
+            $tasks = Task::where('user_id', auth()->id())
+                ->orderBy($sortBy, $sortOrder)->paginate();
         }
 
         return view('tasks.index', [
@@ -83,7 +86,7 @@ class TasksController extends Controller
 
         $task->save();
 
-        $task->priorities()->sync($request->input('priority'));
+        $task->priorities()->sync($request->input('priorities'));
 
 
         return redirect('/tasks')->with('success', 'Task Created');
