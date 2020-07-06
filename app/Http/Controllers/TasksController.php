@@ -11,13 +11,9 @@ class TasksController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($priority = null)
     {
-        //       dd(request()->input());
-
         switch (request()->get('sortBy')) {
             case 'created':
                 $sortBy = 'created_at';
@@ -28,21 +24,26 @@ class TasksController extends Controller
             case 'title':
                 $sortBy = 'title';
                 break;
-            case 'priority':
-                $sortBy = 'priority';
-                break;
             default:
                 $sortBy = 'created_at';
         }
 
-        $sortOrder = (request()->get('sortOrder') == 'ascending')
-            ? 'asc'
-            : 'desc';
+        $sortOrder = request()->input('sortOrder') == 'asc'
+            ? 'desc' : 'asc';
 
+        if ($priority) {
+            $tasks = Priority::where('name', $priority)->firstOrFail()
+                ->tasks()->orderBy($sortBy, $sortOrder)->paginate();
+        } else {
+            $tasks = Task::orderBy($sortBy, $sortOrder)->paginate();
+        }
 
-        $tasks = Task::orderBy('created_at', $sortOrder)->paginate(8);
+        return view('tasks.index', [
+            'tasks' => $tasks->appends(request()->except('page')),
+            'sortOrder' => $sortOrder,
+            'sortBy' => $sortBy
+        ]);
 
-        return view('tasks.index')->with('tasks', $tasks);
     }
 
     /**
@@ -74,6 +75,7 @@ class TasksController extends Controller
         // Create Task
         $task = new Task;
         $task->title = $request->input('title');
+        $task->user_id = auth()->id();
 
         if (request()->has('body')) {
             $task->body = $request->input('body');
@@ -95,7 +97,8 @@ class TasksController extends Controller
      */
     public function show($id)
     {
-        $task = Task::find($id);
+        $task = Task::findOrFail($id);
+
         return view('tasks.show')->with('task', $task);
     }
 
@@ -107,10 +110,11 @@ class TasksController extends Controller
      */
     public function edit($id)
     {
-        $data['task'] = Task::find($id);
-        $data['priorities'] = Priority::all();
-        return view('tasks.edit', ['data' => $data]);
-        //return view('tasks.edit')->with('task', $task);
+        $task = Task::find($id);
+
+        $priorities = Priority::all();
+
+        return view('tasks.edit', compact('priorities', 'task'));
     }
 
     /**
@@ -118,43 +122,34 @@ class TasksController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param int $id
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
+        $task = Task::findOrFail($id);
+
+        if (request()->has('completed')) {
+            // we want to mark as incomplete
+            if ($task->isCompleted) {
+                $task->markAsIncomplete();
+                return redirect(route('tasks.index'))->with('success', 'Task marked incomplete');
+            }
+            $task->markAsCompleted();
+            return redirect(route('tasks.index'))->with('success', 'Task marked complete');
+        }
+
         $this->validate($request, [
             'title' => 'required',
         ]);
 
-        $task = Task::find($id);
-        $task->title = $request->input('title');
-        $task->body = $request->input('body');
-        $task->completed_at = now();
+        $task->update(request()->only([
+            'title', 'body'
+        ]));
 
-
-        $task->save();
-
-        //if request from Tasks Index View (toggle complete), skip this
-        if (($request->input('_method')) != "PATCH") {
-            //Process and store the priorities
-            $data['priorities'] = Priority::all();
-            $plist = new PListsController();
-            $plist->task_id = $task->id;
-            $plist->title = $task->title;
-
-            foreach ($data['priorities'] as $p) {
-                $p_string = "priority-" . $p->p_type;
-                if ($request->input($p_string) == TRUE) {
-                    $plist->priority = $request->input($p_string);
-                    $plist->update($plist->task_id, $plist->title, $plist->priority);
-                } else {
-                    $plist->priority = $p->p_type;
-                    $plist->destroy($plist->task_id, $plist->priority);
-                }
-            }
+        if ($request->has('priorities')) {
+            $task->priorities()->sync(array_values($request->input('priorities')));
         }
-        return redirect('/tasks')->with('success', 'Task Updated');
 
+        return redirect(route('tasks.show', $task))->with('success', 'Task Updated');
     }
 
     /**
@@ -167,14 +162,7 @@ class TasksController extends Controller
     {
         $task = Task::find($id);
         $task->delete();
+
         return redirect('/tasks')->with('success', 'Task Deleted');
     }
-
-    public function deleted()
-    {
-        $tasks = Task::deletedTasks()->paginate();
-
-        return view('tasks.index', compact('tasks'));
-    }
-
 }

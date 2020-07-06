@@ -1,53 +1,37 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Edit Task</h1>
+    <a href="{{route('tasks.show', $task)}}" class="btn btn-outline-secondary">Go Back</a>
+    <form action="{{ route('tasks.update', $task->id) }}" method="post">
 
-    <!--
-        Form for creating a Task
-    -->
-    {!! Form::open(['action' => ['TasksController@update', $data['task']->id], 'method' => 'POST']) !!}
-    <div class = "form-group">
-        {{Form::label('title', 'Title')}}
-        {{Form::text('title', $data['task']->title,[ 'class' => 'form-control', 'placeholder'=> 'title' ])}}
-    </div>
-    <div class = "form-group">
-        <b>Priorities:</b>
-        @foreach($data['priorities'] as $priority)
-            <span style = "background-color: {{$priority->hex_color}};">
+        <h1>Edit Task
+            @foreach ($priorities as $priority)
+                <div class="pull-right margin-top-lg badge priority-{{ $priority->name }} margin-y-sm"
+                     style="border-radius: 0;">
+                    <label>
+                        <input type="checkbox"
+                               {{ $task->priorities->contains($priority->id) ? "checked=checked" : null }}
+                               name="priorities[]" value="{{ $priority->id }}">
+                        {{ strtoupper($priority->name) }}
+                    </label>
 
-            <!--check to see if the box should be checked-->
-            {{$found = FALSE}}
-            @foreach(\App\PList::all() as $plist)
-                @if ($data['task']->id == $plist->task_id && $plist->priority == $priority->p_type)
-                    {{$found =  " "}} <!--'TRUE' kept placing a '1' on the page-->
-                @endif
+                </div>
             @endforeach
-            @if($found == TRUE)
-                {!! Form::checkbox('priority-' . $priority->p_type, $priority->p_type, TRUE ,  ['placeholder'=>'priority']) !!}
-            @else
-                {!! Form::checkbox('priority-' . $priority->p_type, $priority->p_type, FALSE ,  ['placeholder'=>'priority']) !!}
-            @endif
+        </h1>
 
-                    {{Form::label('title',$priority->p_type)}}
 
-                </span>
-        @endforeach
-    </div>
-    <div class = "form-group">
-        {{Form::label('body', 'Body')}}
-        {{Form::textarea('body', $data['task']->body,['id' =>'article-ckeditor', 'class' => 'form-control', 'placeholder'=> 'body text' ])}}
-    </div>
-    <div class = "form-group">
+        {{ method_field('patch') }}
+        {{ csrf_field() }}
 
-        {{Form::label('completed', 'Task Completed')}}
+        <div class="row margin-x-lg">
+            <input class="form-control" type="text" name="title" id="title" value="{{ $task->title }}">
+        </div>
 
-                {!! Form::checkbox('completed', TRUE, FALSE ,  ['placeholder'=>'completed']) !!}
+        <textarea name="body" id="body" cols="30" rows="10"
+                  class="form-control" placeholder="Body of task (optional)">{{ $task->body }}</textarea>
 
-    </div>
+        <button type="submit" class="btn btn-default margin-top-md pull-right">Update task</button>
 
-    {{Form::hidden('_method', 'PUT')}}  <!--spoofing a PUT request over POST-->
-    {{Form::submit('Submit', ['class' => 'btn btn-primary'])}}
-    {!! Form::close() !!}
+    </form>
 
 @endsection
