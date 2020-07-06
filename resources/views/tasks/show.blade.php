@@ -1,48 +1,52 @@
 @extends('layouts.app')
 
 @section('content')
-    <a href="/tasks" class="btn btn-outline-secondary">Go Back</a>
+    <a href="{{route('tasks.index')}}" class="btn btn-outline-secondary">Go Back</a>
     @if($task->completed == FALSE)
-        <h1>{{$task->title}}</h1>
-    @else
-        <h1 style="text-decoration: line-through;">{{$task->title}}</h1>
-    @endif
+        <h1>{{$task->title}}
+            @else
+                <h1 style="text-decoration: line-through;">{{$task->title}}
+                    @endif
 
-    <!-- PRIORITIES -->
-    <hr>
+                    @foreach ($task->priorities as $priority)
+                        <div class="pull-right margin-top-lg badge priority-{{ $priority->name }} margin-y-sm"
+                             style="border-radius: 0;">
+                            <label>
+                                {{ strtoupper($priority->name) }}
+                            </label>
 
-    @foreach ($task->priorities as $priority)
-        <span class="badge text-uppercase priority priority-{{ $priority->name }}">{{ $priority->name }}</span>
-    @endforeach
+                        </div>
+                    @endforeach
+                </h1>
 
-    <!--
+                @if ($task->body)
 
-    urgent
-    important
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            {{ $task->body }}
+                        </div>
+                    </div>
+                @endif
 
+                <hr>
+                <p>
+                    <strong>Created:</strong> {{$task->created_at->format('m/d/Y, h:i A')}}
+                    <strong>Modified:</strong>{{$task->updated_at->format('m/d/Y, h:i A')}}
+                    @if($task->completed_at)
+                        <strong>Completed:</strong> {{date('m/d/Y, h:i A',strtotime($task->completed_at))}}
+                    @endif
+                </p>
+                <hr>
+                <div class="pull-left margin-top-lg margin-y-sm"><a class="btn btn-default"
+                                                                    href="{{ route('tasks.edit', $task->id) }}">Edit</a>
+                </div>
+                <div class="pull-left margin-top-lg margin-y-sm">
+                    <form action="">
+                        <button type="submit" class="btn btn-danger" href="{{ route('tasks.destroy', $task->id) }}">
+                            Delete
+                        </button>
+                    </form>
+                </div>
 
-    <div>
-        {!!$task->body!!}
-    </div>
-
-    <hr>
-    <table style="width: 100%;"
-    <tr>
-        <td><small><b>Created:</b> {{$task->created_at->format('m/d/Y, h:i A')}}</small></td>
-        <td><small><b>Modified:</b>{{$task->updated_at->format('m/d/Y, h:i A')}}</small></td>
-
-        @if($task->completed == TRUE)
-            <td><small><b>Completed:</b> {{date('m/d/Y, h:i A',strtotime($task->completed_at))}}</small></td>
-        @else
-            <td><small><b>Completed:</b></small></td>
-        @endif
-    </tr></table>
-    <hr>
-    <a href="/tasks/{{$task->id}}/edit" class="btn btn-outline-secondary">Edit</a>
-
-    <!--Delete Button-->
-    {!!Form::open(['action'=>['TasksController@destroy', $task->id], 'method' => 'POST', 'class' => 'float-right'])!!}
-    {{Form::hidden('_method','DELETE')}}
-    {{Form::submit('Delete', ['class' => 'btn btn-danger'])}}
-    {!!Form::close()!!}
+        {{ method_field('DELETE') }}
 @endsection
