@@ -14,7 +14,7 @@
             <ul class="nav navbar-nav">
                 <li class="{{ is_active(['/']) }}"><a href="{{ route('home') }}">Home</a></li>
                 <li class="{{ is_active(['about']) }}"><a href="{{ route('about') }}">About</a></li>
-                <li class="{{ is_active(['tasks', 'tasks/completed']) }}"><a href="{{ route('tasks.index') }}">Tasks</a>
+                <li class="{{ is_active(['tasks', 'tasks/*']) }}"><a href="{{ route('tasks.index') }}">Tasks</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -24,9 +24,16 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('google.login') }}">
-                        Login With Google <i class="fa fa-google"></i>
-                    </a>
+                    @auth
+                        <form action="{{ route('logout') }}" method="post">
+                            {{ csrf_field() }}
+                            <button type="submit" class="btn btn-link login-link">Log out</button>
+                        </form>
+                    @else
+                        <a href="{{ route('google.login') }}">
+                            Login With Google <i class="fa fa-google"></i>
+                        </a>
+                    @endauth
                 </li>
             </ul>
         </div>
