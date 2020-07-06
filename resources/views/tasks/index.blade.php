@@ -99,16 +99,15 @@
                                             <strike class="text-muted">{{ $task->title }}</strike>
                                         @else
                                             {{$task->title}}
+
                                         @endif
 
                                     </a>
-
 
                                 </form>
 
                             </h3>
                         </td>
-
                         <td class="text-right">
                             <div class="clearfix">
                                 @foreach($task->priorities as $priority)
@@ -119,6 +118,7 @@
 
                     </tr>
                 </table>
+                <small><strong>Created:</strong> {{$task->created_at->format('m/d/Y, h:i A')}}</small>
             </div>
         </div>
     @empty
