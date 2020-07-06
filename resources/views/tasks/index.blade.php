@@ -17,7 +17,7 @@
         @endif
         @if(request()->query('sortBy'))
             Sort by: <span
-                class="badge">{{ ucwords(request()->query('sortBy')) }} {{ strtoupper($sortOrder) ?? 'null' }}</span>
+                class="badge">{{ ucwords(request()->query('sortBy')) }} {{ strtoupper(request()->query('sortOrder')) ?? null }}</span>
         @endif
     </div>
 
